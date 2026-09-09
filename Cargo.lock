@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "timelapsedb"
+name = "timelapsedb-server"
 version = "0.1.0"
