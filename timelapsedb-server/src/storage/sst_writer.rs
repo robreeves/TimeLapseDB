@@ -7,11 +7,23 @@ pub struct SSTWriter {}
 
 impl SSTWriter {
     pub fn new() -> Self {
-        SSTWriter {  }
+        SSTWriter {}
     }
 
     pub fn write(&self) -> Result<(), io::Error> {
         // TODO write SST to disk
+        self.write_header()?;
+        self.write_footer()?;
+        Ok(())
+    }
+
+    fn write_header(&self) -> Result<(), io::Error> {
+        // TODO
+        Ok(())
+    }
+
+    fn write_footer(&self) -> Result<(), io::Error> {
+        // TODO
         Ok(())
     }
 }
