@@ -17,9 +17,11 @@ impl SSTWriter {
         let file = OpenOptions::new().write(true).create_new(true).open(path)?;
         let mut writer = BufWriter::new(file);
 
-        // TODO write SST to disk
         self.write_header(&mut writer)?;
+        // TODO write other parts of SST
         self.write_footer(&mut writer)?;
+
+        writer.flush()?;
         Ok(())
     }
 
