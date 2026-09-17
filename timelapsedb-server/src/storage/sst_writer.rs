@@ -1,4 +1,5 @@
 use std::io;
+use std::path::PathBuf;
 
 const HEADER_MAGIC: [u8; 12] = *b"_TLDB-START_";
 const FOOTER_MAGIC: [u8; 10] = *b"_TLDB-END_";
@@ -10,7 +11,7 @@ impl SSTWriter {
         SSTWriter {}
     }
 
-    pub fn write(&self) -> Result<(), io::Error> {
+    pub fn write(&self, path: &PathBuf) -> Result<(), io::Error> {
         // TODO write SST to disk
         self.write_header()?;
         self.write_footer()?;
