@@ -1,3 +1,4 @@
+use std::fs::{File, OpenOptions};
 use std::io;
 use std::path::PathBuf;
 
@@ -12,18 +13,20 @@ impl SSTWriter {
     }
 
     pub fn write(&self, path: &PathBuf) -> Result<(), io::Error> {
+        let file = OpenOptions::new().write(true).create_new(true).open(path)?;
+
         // TODO write SST to disk
-        self.write_header()?;
-        self.write_footer()?;
+        self.write_header(&file)?;
+        self.write_footer(&file)?;
         Ok(())
     }
 
-    fn write_header(&self) -> Result<(), io::Error> {
+    fn write_header(&self, file: &File) -> Result<(), io::Error> {
         // TODO
         Ok(())
     }
 
-    fn write_footer(&self) -> Result<(), io::Error> {
+    fn write_footer(&self, file: &File) -> Result<(), io::Error> {
         // TODO
         Ok(())
     }
