@@ -1,5 +1,6 @@
 mod storage;
 
+use crate::storage::sst_reader::SSTReader;
 use crate::storage::sst_writer::SSTWriter;
 use std::fs::{create_dir_all, remove_file};
 use std::path::PathBuf;
@@ -17,5 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let writer = SSTWriter::new();
     writer.write(&sst_path)?;
+
+    let reader = SSTReader::new(&sst_path);
     Ok(())
 }
