@@ -1,7 +1,7 @@
 use std::fs::{File, OpenOptions};
 use std::io::{self, BufWriter, Write};
 use std::path::PathBuf;
-use super::constants::{HEADER_MAGIC, FOOTER_MAGIC, VERSION};
+use super::constants::{SST_HEADER_MAGIC, SST_FOOTER_MAGIC, SST_VERSION};
 
 
 pub struct SSTWriter {}
@@ -24,13 +24,13 @@ impl SSTWriter {
     }
 
     fn write_header(&self, file: &mut BufWriter<File>) -> Result<(), io::Error> {
-        file.write_all(&HEADER_MAGIC)?;
-        file.write_all(&VERSION)?;
+        file.write_all(&SST_HEADER_MAGIC)?;
+        file.write_all(&SST_VERSION)?;
         Ok(())
     }
 
     fn write_footer(&self, file: &mut BufWriter<File>) -> Result<(), io::Error> {
-        file.write_all(&FOOTER_MAGIC)?;
+        file.write_all(&SST_FOOTER_MAGIC)?;
         Ok(())
     }
 }

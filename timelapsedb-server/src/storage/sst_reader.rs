@@ -1,6 +1,6 @@
 use std::io::{self, BufReader};
 use std::{fs::File, path::PathBuf};
-use super::constants::{HEADER_MAGIC, FOOTER_MAGIC, VERSION};
+use super::constants::{SST_HEADER_MAGIC, SST_FOOTER_MAGIC, SST_VERSION};
 
 pub struct SSTReader {
     reader: BufReader<File>,
@@ -24,7 +24,7 @@ impl SSTReader {
     }
 
     fn read_header(&self) -> Result<(), io::Error> {
-        let mut magic = [0u8; HEADER_MAGIC.len()];
+        let mut magic = [0u8; SST_HEADER_MAGIC.len()];
         //TODO
 
         Ok(())
