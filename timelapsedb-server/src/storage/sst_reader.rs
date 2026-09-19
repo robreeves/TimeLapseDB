@@ -21,8 +21,9 @@ impl SSTReader {
     }
 
     fn initialize(&mut self) -> Result<(), io::Error> {
-        // TODO set struct fields
         self.read_header()?;
+        self.read_footer()?;
+        // TODO set struct fields
         Ok(())
     }
 
@@ -42,7 +43,6 @@ impl SSTReader {
 
         let mut version = [0u8; SST_VERSION.len()];
         self.reader.read_exact(&mut version)?;
-        println!("header version: {}", String::from_utf8_lossy(&version));
         if version != SST_VERSION {
             return Err(io::Error::new(
                 io::ErrorKind::InvalidData,
@@ -54,7 +54,22 @@ impl SSTReader {
             ));
         }
 
-        //TODO validate
+        Ok(())
+    }
+
+    fn read_footer(&mut self) -> Result<(), io::Error> {
+        let mut magic = [0u8; SST_FOOTER_MAGIC.len()];
+        self.reader.read_exact(&mut magic)?;
+        if magic != SST_FOOTER_MAGIC {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!(
+                    "Incorrect footer magic in '{}'. Found '{}'",
+                    self.path.display(),
+                    String::from_utf8_lossy(&magic)
+                ),
+            ));
+        }
 
         Ok(())
     }
