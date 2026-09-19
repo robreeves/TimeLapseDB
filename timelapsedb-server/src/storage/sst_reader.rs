@@ -43,6 +43,16 @@ impl SSTReader {
         let mut version = [0u8; SST_VERSION.len()];
         self.reader.read_exact(&mut version)?;
         println!("header version: {}", String::from_utf8_lossy(&version));
+        if version != SST_VERSION {
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!(
+                    "Incorrect version in '{}'. Found '{}'",
+                    self.path.display(),
+                    String::from_utf8_lossy(&version)
+                ),
+            ));
+        }
 
         //TODO validate
 
