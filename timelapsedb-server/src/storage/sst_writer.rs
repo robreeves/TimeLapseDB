@@ -1,10 +1,8 @@
 use std::fs::{File, OpenOptions};
 use std::io::{self, BufWriter, Write};
 use std::path::PathBuf;
+use super::constants::{HEADER_MAGIC, FOOTER_MAGIC, VERSION};
 
-const HEADER_MAGIC: [u8; 12] = *b"_TLDB-START_";
-const FOOTER_MAGIC: [u8; 10] = *b"_TLDB-END_";
-const VERSION: [u8; 1] = *b"0";
 
 pub struct SSTWriter {}
 
