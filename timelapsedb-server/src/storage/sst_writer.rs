@@ -1,8 +1,7 @@
+use super::constants::{SST_FOOTER_MAGIC, SST_HEADER_MAGIC, SST_VERSION};
 use std::fs::{File, OpenOptions};
 use std::io::{self, BufWriter, Write};
 use std::path::PathBuf;
-use super::constants::{SST_HEADER_MAGIC, SST_FOOTER_MAGIC, SST_VERSION};
-
 
 pub struct SSTWriter {}
 

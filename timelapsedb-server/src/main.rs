@@ -19,6 +19,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let writer = SSTWriter::new();
     writer.write(&sst_path)?;
 
-    let reader = SSTReader::new(&sst_path);
+    let reader = SSTReader::new(&sst_path)?;
     Ok(())
 }
