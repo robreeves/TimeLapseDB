@@ -1,11 +1,14 @@
 use super::constants::{SST_FOOTER_MAGIC, SST_HEADER_MAGIC, SST_VERSION};
-use std::io::{self, BufReader, Error, Read};
+use std::fmt;
+use std::io::{self, BufReader, Read};
 use std::{fs::File, path::PathBuf};
 
 pub struct SSTReader {
     path: PathBuf,
     reader: BufReader<File>,
     version: u8,
+    min_timestamp: u64,
+    max_timestamp: u64,
 }
 
 impl SSTReader {
@@ -15,6 +18,8 @@ impl SSTReader {
             path: path.clone(),
             reader: BufReader::new(file),
             version: 0,
+            min_timestamp: 0,
+            max_timestamp: 0,
         };
         sst_reader.initialize()?;
         Ok(sst_reader)
@@ -58,6 +63,14 @@ impl SSTReader {
     }
 
     fn read_footer(&mut self) -> Result<(), io::Error> {
+        let mut min_timestamp_buf = [0u8; 8];
+        self.reader.read_exact(&mut min_timestamp_buf)?;
+        self.min_timestamp = u64::from_be_bytes(min_timestamp_buf);
+
+        let mut max_timestamp_buf = [0u8; 8];
+        self.reader.read_exact(&mut max_timestamp_buf)?;
+        self.max_timestamp = u64::from_be_bytes(max_timestamp_buf);
+
         let mut magic = [0u8; SST_FOOTER_MAGIC.len()];
         self.reader.read_exact(&mut magic)?;
         if magic != SST_FOOTER_MAGIC {
@@ -72,5 +85,18 @@ impl SSTReader {
         }
 
         Ok(())
+    }
+}
+
+impl fmt::Display for SSTReader {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "SSTReader(path={}, version={}, min_timestamp={}, max_timestamp={})",
+            self.path.display(),
+            self.version,
+            self.min_timestamp,
+            self.max_timestamp
+        )
     }
 }

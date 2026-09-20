@@ -29,6 +29,11 @@ impl SSTWriter {
     }
 
     fn write_footer(&self, file: &mut BufWriter<File>) -> Result<(), io::Error> {
+        let mock_min_timestamp: u64 = 123;
+        let mock_max_timestamp: u64 = 345;
+
+        file.write_all(&mock_min_timestamp.to_be_bytes())?;
+        file.write_all(&mock_max_timestamp.to_be_bytes())?;
         file.write_all(&SST_FOOTER_MAGIC)?;
         Ok(())
     }
