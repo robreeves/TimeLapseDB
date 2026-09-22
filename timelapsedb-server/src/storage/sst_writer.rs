@@ -1,4 +1,5 @@
 use super::constants::{SST_FOOTER_MAGIC, SST_HEADER_MAGIC, SST_VERSION};
+use crate::stream::value::Value;
 use std::fs::{File, OpenOptions};
 use std::io::{self, BufWriter, Write};
 use std::path::PathBuf;
@@ -10,7 +11,13 @@ impl SSTWriter {
         SSTWriter {}
     }
 
-    pub fn write(&self, path: &PathBuf) -> Result<(), io::Error> {
+    // TODO better error type
+    pub fn insert(&self, stream_id: u32, value: Value) -> Result<(), io::Error> {
+        // TODO
+        Ok(())
+    }
+
+    pub fn flush(&self, path: &PathBuf) -> Result<(), io::Error> {
         let file = OpenOptions::new().write(true).create_new(true).open(path)?;
         let mut writer = BufWriter::new(file);
 

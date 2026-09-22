@@ -1,7 +1,10 @@
 mod storage;
+mod stream;
 
 use crate::storage::sst_reader::SSTReader;
 use crate::storage::sst_writer::SSTWriter;
+use crate::stream::data_type::DataType;
+use crate::stream::value::Value;
 use std::fs::{create_dir_all, remove_file};
 use std::path::PathBuf;
 
@@ -17,7 +20,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let writer = SSTWriter::new();
-    writer.write(&sst_path)?;
+    writer.insert(1, Value::new(123, DataType::Int(456)));
+    writer.flush(&sst_path)?;
 
     let reader = SSTReader::new(&sst_path)?;
     print!("reader: {}", reader);

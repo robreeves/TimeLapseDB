@@ -9,6 +9,8 @@ pub struct SSTReader {
     version: u8,
     min_timestamp: u64,
     max_timestamp: u64,
+    index_offset: u32,
+    index_length: u32,
 }
 
 impl SSTReader {
@@ -20,6 +22,8 @@ impl SSTReader {
             version: 0,
             min_timestamp: 0,
             max_timestamp: 0,
+            index_offset: 0,
+            index_length: 0,
         };
         sst_reader.initialize()?;
         Ok(sst_reader)
