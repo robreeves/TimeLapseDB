@@ -3,17 +3,23 @@ use crate::stream::value::Value;
 use std::fs::{File, OpenOptions};
 use std::io::{self, BufWriter, Write};
 use std::path::PathBuf;
+use std::collections::HashMap;
 
-pub struct SSTWriter {}
+pub struct SSTWriter {
+    values: HashMap<u32, Vec<Value>>
+}
 
 impl SSTWriter {
     pub fn new() -> Self {
-        SSTWriter {}
+        SSTWriter {
+            values: HashMap::new()
+        }
     }
 
     // TODO better error type
-    pub fn insert(&self, stream_id: u32, value: Value) -> Result<(), io::Error> {
-        // TODO
+    pub fn insert(&mut self, stream_id: u32, value: Value) -> Result<(), io::Error> {
+        let values = self.values.entry(stream_id).or_insert_with(Vec::new);
+        // TODO verify timestamp is newer then insert
         Ok(())
     }
 
