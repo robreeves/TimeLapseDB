@@ -1,8 +1,8 @@
 use crate::stream::data_type::DataType;
 
 pub struct Value {
-    timestamp: u64,
-    value: DataType,
+    pub timestamp: u64,
+    pub value: DataType,
 }
 
 impl Value {

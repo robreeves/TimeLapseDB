@@ -1,25 +1,37 @@
 use super::constants::{SST_FOOTER_MAGIC, SST_HEADER_MAGIC, SST_VERSION};
 use crate::stream::value::Value;
+use std::collections::HashMap;
 use std::fs::{File, OpenOptions};
 use std::io::{self, BufWriter, Write};
 use std::path::PathBuf;
-use std::collections::HashMap;
 
 pub struct SSTWriter {
-    values: HashMap<u32, Vec<Value>>
+    values: HashMap<u32, Vec<Value>>,
 }
 
 impl SSTWriter {
     pub fn new() -> Self {
         SSTWriter {
-            values: HashMap::new()
+            values: HashMap::new(),
         }
     }
 
     // TODO better error type
     pub fn insert(&mut self, stream_id: u32, value: Value) -> Result<(), io::Error> {
         let values = self.values.entry(stream_id).or_insert_with(Vec::new);
-        // TODO verify timestamp is newer then insert
+        if let Some(last_val) = values.last() {
+            if value.timestamp < last_val.timestamp {
+                return Err(io::Error::new(
+                    io::ErrorKind::InvalidData,
+                    format!(
+                        "StreamId {} last timestamp is {}. New write cannot write older timestamp {}.",
+                        stream_id, last_val.timestamp, value.timestamp
+                    ),
+                ));
+            }
+        }
+
+        values.push(value);
         Ok(())
     }
 

@@ -20,7 +20,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let mut writer = SSTWriter::new();
-    writer.insert(1, Value::new(123, DataType::Int(456)));
+    writer.insert(1, Value::new(123, DataType::Int(456)))?;
+    writer.insert(1, Value::new(456, DataType::Int(456)))?;
     writer.flush(&sst_path)?;
 
     let reader = SSTReader::new(&sst_path)?;
