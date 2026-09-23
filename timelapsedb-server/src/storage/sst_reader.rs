@@ -1,6 +1,6 @@
 use super::constants::{SST_FOOTER_MAGIC, SST_HEADER_MAGIC, SST_VERSION};
 use std::fmt;
-use std::io::{self, BufReader, Read};
+use std::io::{self, BufReader, Read, Seek};
 use std::{fs::File, path::PathBuf};
 
 pub struct SSTReader {
@@ -67,6 +67,9 @@ impl SSTReader {
     }
 
     fn read_footer(&mut self) -> Result<(), io::Error> {
+        let footer_size = (8 + 8 + SST_FOOTER_MAGIC.len()) as i64;
+        self.reader.seek(io::SeekFrom::End(-(footer_size)))?;
+
         let mut min_timestamp_buf = [0u8; 8];
         self.reader.read_exact(&mut min_timestamp_buf)?;
         self.min_timestamp = u64::from_be_bytes(min_timestamp_buf);

@@ -40,7 +40,7 @@ impl SSTWriter {
         let mut writer = BufWriter::new(file);
 
         self.write_header(&mut writer)?;
-        // TODO write other parts of SST
+        self.write_blocks(&mut writer)?;
         self.write_footer(&mut writer)?;
 
         writer.flush()?;
@@ -60,6 +60,25 @@ impl SSTWriter {
         file.write_all(&mock_min_timestamp.to_be_bytes())?;
         file.write_all(&mock_max_timestamp.to_be_bytes())?;
         file.write_all(&SST_FOOTER_MAGIC)?;
+        Ok(())
+    }
+
+    fn write_blocks(&self, file: &mut BufWriter<File>) -> Result<(), io::Error> {
+        for (stream_id, values) in &self.values {
+            // block header
+            // stream id
+            // stream type
+            // values count
+
+            // block
+            // timestamp, value
+            // ...repeat ...
+            for val in values {
+                file.write_all(&val.timestamp.to_be_bytes())?;
+                // TODO value
+            }
+        }
+
         Ok(())
     }
 }
