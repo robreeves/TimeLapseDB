@@ -1,4 +1,5 @@
 use super::constants::{SST_FOOTER_MAGIC, SST_HEADER_MAGIC, SST_VERSION};
+use crate::stream::data_type::DataType;
 use crate::stream::value::Value;
 use std::collections::HashMap;
 use std::fs::{File, OpenOptions};
@@ -75,7 +76,8 @@ impl SSTWriter {
             // ...repeat ...
             for val in values {
                 file.write_all(&val.timestamp.to_be_bytes())?;
-                // TODO value
+                // TODO for string it needs the string length written first
+                file.write_all(&val.value.to_bytes())?;
             }
         }
 
